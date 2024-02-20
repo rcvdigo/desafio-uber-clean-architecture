@@ -29,7 +29,7 @@ repos:
     hooks:
     -   id: requirements
         name: requirements
-        entry: bash -c 'src/venv/Scripts/pip freeze > requirements.txt; git add requirements.txt'
+        entry: bash -c 'venv/Scripts/pip freeze > requirements.txt; git add requirements.txt'
         language: system
         pass_filenames: false
         stages: [commit]
