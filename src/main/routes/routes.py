@@ -7,7 +7,12 @@ from src.main.application.email_sender_service import EmailSenderService
 from src.main.controllers.email_sender_controller import EmailSenderController
 
 
-email_sender_gateway = SesEmailSender(amazon_simple_email_service='ses')
+email_sender_gateway = SesEmailSender(
+    service_name='ses',
+    region_name='us-east-1',
+    access_key='AKIA6ODU6EW7OXANQCMI',
+    secret_key='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'
+    )
 email_sender_service = EmailSenderService(email_gateway=email_sender_gateway)
 email_sender_controller = EmailSenderController(email_sender_service=email_sender_service)
 
