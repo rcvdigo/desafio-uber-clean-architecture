@@ -13,6 +13,6 @@ class EmailSenderController():
         try:
             self.__email_sender_service.send_email(
                 email_request.to, email_request.subject, email_request.body)
-            return jsonify({'message': 'Email sent successfully!'}), 200
+            return jsonify({'message': 'Email enviado com sucesso!'}), 200
         except EmailServiceException as ex:
-            return jsonify({'message': 'Email sending failed.', 'cause': ex}), 500
+            return jsonify({'message': 'Falha ao enviar o email.', 'cause': ex}), 500

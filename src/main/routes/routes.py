@@ -10,8 +10,8 @@ from src.main.controllers.email_sender_controller import EmailSenderController
 email_sender_gateway = SesEmailSender(
     service_name='ses',
     region_name='us-east-1',
-    access_key='AKIA6ODU6EW7OXANQCMI',
-    secret_key='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'
+    access_key='',
+    secret_key=''
     )
 email_sender_service = EmailSenderService(email_gateway=email_sender_gateway)
 email_sender_controller = EmailSenderController(email_sender_service=email_sender_service)
@@ -24,7 +24,7 @@ def send_email():
         email_data = request.json
         email_request = EmailRequest(email_data['to'], email_data['subject'], email_data['body'])
         response, status_code = email_sender_controller.send_email(email_request)
-        return jsonify(response), status_code
+        return jsonify({'message': response.get_data(as_text=True)}), status_code
     except KeyError as e:
         return jsonify({'message': 'Invalid request data.', 'cause': str(e)}), 400
     except Exception as e:
