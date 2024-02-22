@@ -52,4 +52,3 @@ Agora vamos voltar a camada CORE onde ficam nossas regras de negócio. Para cria
 Agora vamos criar a camada Controlers.
 
     Essa camada irá receber as requisições HTTP e vai fazer a chamada de tudo para fazer o disparo de e-mail.
-    
