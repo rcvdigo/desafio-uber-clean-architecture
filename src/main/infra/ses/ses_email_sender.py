@@ -1,5 +1,9 @@
 # pylint: disable = raise-missing-from
 # pylint: disable=import-error
+
+# Imports os .env
+import os
+
 # Imports Types
 from typing import Dict
 
@@ -36,7 +40,7 @@ class SesEmailSender(EmailSenderGateway):
     def send_email(self, to: str, subject: str, body: str) -> Dict:
         email_request = {
             # Substitua pelo seu endereço de e-mail verificado no SES
-            'Source': 'rcvdigo@gmail.com',  
+            'Source': os.getenv('SOURCE'),  
             'Destination': {'ToAddresses': [to]},
             'Message': {
                 'Subject': {'Data': subject},
