@@ -1,3 +1,4 @@
+# pylint: disable=import-error
 from flask import Blueprint
 from flask import request as request_flask
 from flask import jsonify
@@ -11,6 +12,9 @@ from src.main.composers.send_email_composer import send_email_composer
 # Import error handler
 from src.main.core.exceptions.error_handler import handler_errors
 
+# Import validators
+from src.main.validators.email_validator import email_validator
+
 
 # Apelidando o @app para @email_route_bp
 email_route_bp = Blueprint("email_routes", __name__)
@@ -20,8 +24,8 @@ def send_email():
     http_response = None
 
     try:
-        # Protegendo a inserção de dados injetando o validator user_find_validator
-        # user_find_validator(request=request_flask)
+        # Protegendo a inserção de dados injetando o validator email_validator
+        email_validator(request=request_flask)
 
         http_response = request_adapter(
             request=request_flask,
