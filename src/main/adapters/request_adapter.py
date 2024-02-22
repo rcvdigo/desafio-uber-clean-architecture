@@ -1,3 +1,4 @@
+# pylint: disable=import-error
 from typing import Callable
 from flask import request as FlaskRequest
 from src.main.core.http_request import HttpRequest
@@ -8,7 +9,7 @@ def request_adapter(
         request: FlaskRequest, # type: ignore
         controller: Callable
         ) -> HttpResponse:
-    
+
     body = None
 
     if request.data:

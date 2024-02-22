@@ -1,9 +1,6 @@
 import os
 
 
-from dotenv import load_dotenv
-
-
 from src.main.infra.ses.ses_email_sender import SesEmailSender
 from src.main.application.email_sender_service import EmailSenderService
 from src.main.controllers.sender_controller import SenderController

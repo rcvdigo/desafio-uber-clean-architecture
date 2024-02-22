@@ -16,7 +16,7 @@ class EmailSenderService(EmailSenderUseCase):
             subject=subject,
             body=body
             )
-        
+
         response = self.__format_response(
             to=to,
             subject=subject,

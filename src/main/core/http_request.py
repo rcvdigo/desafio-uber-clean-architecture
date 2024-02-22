@@ -1,3 +1,4 @@
+# pylint: disable=too-many-arguments
 # Representando os dados de requisição
 class HttpRequest:
 
