@@ -1,5 +1,6 @@
+# pylint: disable=too-many-arguments
 from typing import Dict
-from datetime import date
+from datetime import date as datetime
 
 
 from src.main.core.sns_sender_use_case import SnsSenderUseCase
@@ -16,7 +17,7 @@ class SnsService(SnsSenderUseCase):
                    name: str,
                    age: int,
                    value: float,
-                   date: date,
+                   date: datetime,
                    key_pix: str,
                    source: str,
                    to: str,
@@ -24,7 +25,7 @@ class SnsService(SnsSenderUseCase):
                    body: str,
                    phone_numbers: str
                    ) -> Dict:
-        
+
         self.__sns_gateway.send_sns(
             topic_arn=topic_arn,
             name=name,
@@ -61,7 +62,7 @@ class SnsService(SnsSenderUseCase):
         name: str,
         age: int,
         value: float,
-        date: date,
+        date: datetime,
         key_pix: str,
         source: str,
         to: str,

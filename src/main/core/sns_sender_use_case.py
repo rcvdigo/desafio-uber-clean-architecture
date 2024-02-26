@@ -1,4 +1,5 @@
-from datetime import date
+# pylint: disable=too-many-arguments
+from datetime import date as datetime
 from abc import ABC
 from abc import abstractmethod
 from typing import Dict
@@ -12,7 +13,7 @@ class SnsSenderUseCase(ABC):
                  name: str,
                  age: int,
                  value: float,
-                 date: date,
+                 date: datetime,
                  key_pix: str,
                  source: str,
                  to: str,

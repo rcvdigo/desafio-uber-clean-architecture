@@ -1,13 +1,13 @@
 # pylint: disable = raise-missing-from
 # pylint: disable=import-error
+# pylint: disable=too-many-arguments
 
-# Imports os .env
-import os
+# Imports .env
 import json
 
 # Imports Types
 from typing import Dict
-from datetime import date
+from datetime import date as datetime
 
 
 # Imports AWS services
@@ -42,7 +42,7 @@ class SnsSender(SnsSenderGateway):
                  name: str,
                  age: int,
                  value: float,
-                 date: date,
+                 date: datetime,
                  key_pix: str,
                  source: str,
                  to: str,
@@ -65,11 +65,11 @@ class SnsSender(SnsSenderGateway):
         }
 
         # Enviando a mensagem ao tópico SES
-        try:        
+        try:
             self.__amazon_simple_notification_service.publish(
                 TopicArn=topic_arn,
                 Subject="API_DESAFIO_UBER",
-                Message=json.dumps(sns_request),            
+                Message=json.dumps(sns_request),
             )
         except Exception as e:
             # Trate qualquer exceção que possa ocorrer durante o envio do e-mail
