@@ -4,7 +4,7 @@ from flask import Blueprint, jsonify, request
 from src.main.core.email_request import EmailRequest
 from src.main.infra.ses.ses_email_sender import SesEmailSender
 from src.main.application.email_sender_service import EmailSenderService
-from src.main.controllers.email_sender_controller import EmailSenderController
+from src.main.controllers.old_email_sender_controller import EmailSenderController
 
 
 email_sender_gateway = SesEmailSender(

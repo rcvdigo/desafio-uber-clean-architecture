@@ -7,6 +7,7 @@ from flask import jsonify
 from src.main.adapters.request_adapter import request_adapter
 
 # Import from composers
+from src.main.composers.send_sns_composer import send_sns_composer
 from src.main.composers.send_email_composer import send_email_composer
 
 # Import error handler
@@ -30,6 +31,25 @@ def send_email():
         http_response = request_adapter(
             request=request_flask,
             controller=send_email_composer()
+        )
+
+    except Exception as exeception:
+        http_response = handler_errors(error=exeception)
+
+    return jsonify(http_response.body), http_response.status_code
+
+
+@email_route_bp.route("/api/sns", methods=["POST"])
+def send_sns():
+    http_response = None
+
+    try:
+        # Protegendo a inserção de dados injetando o validator email_validator
+        # email_validator(request=request_flask)
+
+        http_response = request_adapter(
+            request=request_flask,
+            controller=send_sns_composer()
         )
 
     except Exception as exeception:

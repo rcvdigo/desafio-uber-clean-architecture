@@ -2,5 +2,9 @@
 venv/
 __pycache__/
 
-# Variaveis de ambiente
+# Ignorar o arquivo .env
 .env
+
+# Ignorar arquivos .pyc
+*.pyc
+.pytest_cache/
