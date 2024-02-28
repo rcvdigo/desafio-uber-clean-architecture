@@ -21,7 +21,7 @@ class EmailSnsSenderController(ControllerInterface):
         topic_arn = os.getenv('TOPIC_ARN')
         nome = http_request.body["mensagem"]["nome"]
         idade = http_request.body["mensagem"]["idade"]
-        valor = f"{http_request.body["mensagem"]["valor"]:.2f}"
+        valor = f"{http_request.body['mensagem']['valor']:.2f}"
         data = http_request.body["mensagem"]["data"]
         chavePix = http_request.body["mensagem"]["chavePix"]
         telefone = http_request.body["mensagem"]["telefone"]
