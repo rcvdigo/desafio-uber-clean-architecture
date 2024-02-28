@@ -54,6 +54,6 @@ class SesEmailSender(EmailSenderGateway):
         except Exception as e:
             # Trate qualquer exceção que possa ocorrer durante o envio do e-mail
             raise EmailServiceException(
-                message="Falha ao enviar o email: ",
+                message=f"Falha ao enviar o email: {email_request}",
                 cause=e
             )

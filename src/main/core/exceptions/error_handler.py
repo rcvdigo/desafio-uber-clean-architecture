@@ -26,7 +26,7 @@ def handler_errors(error: Exception) -> HttpResponse:
         status_code=500,
         body={
             "errors": {
-                "title": "Generic Error, contact your administrator",
+                "title": "Erro genérico, contate o administrador do sistema",
                 "detail": str(error)
             }
         }

@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mensageria PIX</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
+        <style>
+            body {
+                padding-top: 50px;
+                background-color: #f8f9fa; /* Cor de fundo semelhante ao BTG */
+                color: #343a40; /* Cor do texto */
+            }
+            .container {
+                max-width: 500px;
+            }
+
+            /* Ajuste de largura para o campo de telefone */
+            .iti {
+                width: 100% !important;
+            }
+
+            .form-group.hidden {
+                display: none;
+            }
+
+            .btn-back {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1 class="text-center mb-4">Mensageria PIX</h1>
+        <form>
+
+            <div id="bloco_um" class="form-group">
+
+                <div id="step1" class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" class="form-control" id="nome" placeholder="Digite seu nome">
+                </div>
+                <div id="step2" class="form-group">
+                    <label for="idade">Idade:</label>
+                    <input type="number" class="form-control" id="idade" placeholder="Digite sua idade">
+                </div>
+                <div id="step3" class="form-group">
+                    <label for="valor">Valor:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">R$</span>
+                        </div>
+                        <input type="text" class="form-control" id="valor" placeholder="Digite o valor" pattern="[0-9]+([\.,][0-9]+)?" inputmode="numeric">
+                    </div>
+                    <small id="valorHelp" class="form-text text-muted">Ex:120.26</small>
+                </div>
+
+            </div>
+
+            <div id="bloco_dois" class="form-group hidden">
+                
+                <div id="step4" class="form-group">
+                    <label for="data">Data:</label>
+                    <input type="date" class="form-control" id="data">
+                </div>
+                <div id="step5" class="form-group">
+                    <label for="chave-pix">Chave PIX:</label>
+                    <input type="text" class="form-control" id="chave-pix" placeholder="Digite sua chave PIX">
+                </div>
+                <div id="step6" class="form-group">
+                    <label for="telefone" class="">Telefone:</label>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" id="telefone" placeholder="Digite seu telefone" style="width: 100%;" required>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="bloco_tres" class="form-group hidden">
+
+                <div id="step7" class="form-group">
+                    <label for="assunto">Assunto:</label>
+                    <input type="text" class="form-control" id="assunto" placeholder="Digite o assunto" required>
+                </div>
+                <div id="step8" class="form-group">
+                    <label for="remetente">Remetente:</label>
+                    <input type="email" class="form-control" id="remetente" placeholder="Digite seu email" required>
+                </div>
+                <div id="step9" class="form-group">
+                    <label for="destinatario">Destinatário:</label>
+                    <input type="email" class="form-control" id="destinatario" placeholder="Digite o email do destinatário" required>
+                </div>
+                <div id="step10" class="form-group">
+                    <label for="corpo-mensagem">Corpo da mensagem:</label>
+                    <textarea class="form-control" id="corpo-mensagem" rows="4" placeholder="Digite o corpo da mensagem" required></textarea>
+                </div>
+            
+            </div>
+
+            <button type="button" class="btn btn-secondary btn-block btn-back" onclick="prevStep()">Voltar</button>
+            <button type="button" class="btn btn-primary btn-block" onclick="nextStep()">Avançar</button>
+            <button type="submit" class="btn btn-success btn-block" id="submitBtn" style="display: none;">Enviar</button>
+        </form>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+        <script>
+
+            // Variaveis de controle para avançar e voltar
+            let currentStep = 1;
+            const totalSteps = 3;
+
+            // Função que avança e faz a troca de campos do formulário
+
+            // console.log({'currentStep': currentStep, 'totalSteps': totalSteps});
+
+            function nextStep() {
+                // console.log({'cli':'cou' , 'currentStep': currentStep, 'totalSteps': totalSteps});
+                if (currentStep < totalSteps) {
+                    if (currentStep === 1) {
+                        
+                        // Valida se os campos foram preenchidos
+                        if (currentStep === 1 && !validateStep(currentStep)) {
+                            // Se o passo 1 não estiver validado, não avança
+                            return;
+                        }
+
+                        // Oculta o bloco_um
+                        document.getElementById('bloco_um').classList.add('hidden');
+                        // Incrementa o passo atual
+                        currentStep++;
+                        // console.log({'esta':'aqui' , 'currentStep': currentStep, 'totalSteps': totalSteps});
+                        // Mostra o bloco_dois
+                        document.getElementById('bloco_dois').classList.remove('hidden');
+                    } else if (currentStep === 2) {
+                        
+                        // Valida se os campos foram preenchidos
+                        if (currentStep === 2 && !validateStep(currentStep)) {
+                            // Se o passo 1 não estiver validado, não avança
+                            return;
+                        }
+
+                        // Oculta o bloco_dois
+                        document.getElementById('bloco_dois').classList.add('hidden');
+                        // Incrementa o passo atual
+                        currentStep++;
+                        // console.log({'entrou':'aqui' , 'currentStep': currentStep, 'totalSteps': totalSteps});
+                        // Mostra o bloco_tres
+                        document.getElementById('bloco_tres').classList.remove('hidden');
+                    } 
+
+                    // Atualiza a exibição dos botões de navegação
+                    if (currentStep === totalSteps) {
+                        document.querySelector('.btn-primary').style.display = 'none';
+                        document.querySelector('.btn-secondary').style.display = 'inline-block';
+                        document.querySelector('#submitBtn').style.display = 'inline-block';
+                    } else {
+                        document.querySelector('.btn-primary').style.display = 'inline-block';
+                        document.querySelector('.btn-secondary').style.display = 'inline-block';
+                        document.querySelector('#submitBtn').style.display = 'none';
+                    }
+                }
+            }
+
+            // Função que volta e faz a troca de campos do formulário
+            function prevStep() {
+                // console.log(currentStep);
+                if (currentStep === 2) {
+                    // Esconde o bloco_dois
+                    document.getElementById('bloco_dois').classList.add('hidden');
+
+                    // Volta para o bloco_um
+                    document.getElementById('bloco_um').classList.remove('hidden');
+
+                    // Volta o valor da variavel de validação para o valor anterior
+                    currentStep = 1;
+                } else if (currentStep === 3) {
+                    // console.log(currentStep);
+                    // Esconde o bloco_dois
+                    document.getElementById('bloco_tres').classList.add('hidden');
+
+                    // Volta para o bloco_um
+                    document.getElementById('bloco_dois').classList.remove('hidden');
+                    
+                    // Volta o valor da variavel de validação para o valor anterior
+                    currentStep = 2;
+                }
+
+                // Atualiza a exibição dos botões de navegação
+                if (currentStep === totalSteps) {
+                    document.querySelector('.btn-primary').style.display = 'none';
+                    document.querySelector('.btn-secondary').style.display = 'inline-block';
+                    document.querySelector('#submitBtn').style.display = 'inline-block';
+                } else if (currentStep === 1) {
+                    document.querySelector('.btn-secondary').style.display = 'none';
+                } else {
+                    document.querySelector('.btn-primary').style.display = 'inline-block';
+                    document.querySelector('.btn-secondary').style.display = 'inline-block';
+                    document.querySelector('#submitBtn').style.display = 'none';
+                }
+            }
+
+            // Validador que verifica se os campos foram preenchidos
+            function validateStep(currentStep) {
+                if (currentStep === 1) {
+                    const nome = document.getElementById('nome').value.trim();
+                    const idade = document.getElementById('idade').value.trim();
+                    const valor = document.getElementById('valor').value.trim();
+
+                    if (nome === '' || idade === '' || valor === '') {
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                        return false;
+                    }
+
+                    return true;
+                } else if (currentStep === 2) {
+                    const data = document.getElementById('data').value.trim();
+                    const chave_pix = document.getElementById('chave-pix').value.trim();
+                    const telefone = document.getElementById('telefone').value.trim();
+
+                    if (data === '' || chave_pix === '' || telefone === '') {
+                        alert('Por favor, preencha todos os campos obrigatórios.');
+                        return false;
+                    }
+
+                    return true;
+                } 
+            }
+
+            // Função para resetar o formulário
+            function resetForm() {
+                // Limpa todos os campos do formulário
+                document.querySelectorAll('input, textarea').forEach(function(element) {
+                    element.value = '';
+                });
+
+                // Volta para o primeiro passo e oculta botão "Voltar" e botão de envio
+                currentStep = 1;
+
+                document.querySelector('.btn-back').style.display = 'none';
+                document.querySelector('.btn-primary').style.display = 'inline-block';
+                document.querySelector('#submitBtn').style.display = 'none';
+
+                // Esconde o bloco_tres
+                document.getElementById('bloco_tres').classList.add('hidden');
+                // Mostra o bloco_um
+                document.getElementById('bloco_um').classList.remove('hidden');
+            }
+
+            // Função que impede a digitação de caracteres no campo valor.
+            document.getElementById("valor").addEventListener("input", function() {
+                // Remove caracteres não numéricos, exceto o ponto
+                let cleanedValue = this.value.replace(/[^\d.]/g, '');
+
+                // Verifica se há mais de um ponto na string
+                let parts = cleanedValue.split('.');
+                if (parts.length > 1) {
+                    // Se houver, mantém apenas o primeiro ponto e o máximo de dois dígitos após ele
+                    cleanedValue = parts[0] + '.' + parts.slice(1).join('').substring(0, 2);
+                }
+
+                // Atualiza o valor do campo
+                this.value = cleanedValue;
+            });
+
+            // Função que impede a digitação de caracteres no campo telefone 
+            // e faz a formatação de telefone automatica. 
+            document.getElementById("telefone").addEventListener("input", function() {
+                // Remove caracteres não numéricos
+                let cleanedValue = this.value.replace(/\D/g, '');
+
+                // Adiciona espaço após os dois primeiros dígitos (DDD)
+                if (cleanedValue.length > 2) {
+                    cleanedValue = cleanedValue.replace(/^(\d{2})(\d)/, '$1 $2');
+                }
+
+                // Adiciona hífen após os quatro dígitos seguintes
+                if (cleanedValue.length > 7) {
+                    cleanedValue = cleanedValue.replace(/^(\d{2}) (\d{5})(\d)/, '$1 $2-$3');
+                }
+
+                // Limita a quantidade de caracteres após o hífen
+                if (cleanedValue.length > 13) {
+                    cleanedValue = cleanedValue.substring(0, 13);
+                }
+
+                // Atualiza o valor do campo
+                this.value = cleanedValue;
+            });
+
+            // Inicializa o campo de telefone formatando no padrão universal.
+            var input = document.querySelector("#telefone");
+
+            window.intlTelInput(input, {
+                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+                initialCountry: "br", // Define o país inicial como Brasil
+                separateDialCode: true, // Separa o código do país do número
+                nationalMode: false, // Desativa o modo nacional para exibir sempre o código do país
+                placeholder: "Digite seu telefone",
+                formatOnDisplay: true, // Formata o número enquanto é digitado
+                autoPlaceholder: "aggressive", // Adiciona automaticamente o código do país quando o campo está vazio
+            });
+
+            document.querySelector('form').addEventListener('submit', async function(event) {
+                event.preventDefault(); // Evita o envio padrão do formulário
+
+                // Captura o valor do número de telefone
+                let phone = document.getElementById('telefone').value;
+
+                // Remove os espaços em branco e o caractere "-" do número de telefone
+                phone = phone.replace(/\s+/g, '').replace('-', '');
+
+                // Captura o valor do código do país
+                // const div_dial_code = document.querySelector('.iti__selected-flag');
+
+                // console.log(div_dial_code);
+
+                // Extrai o código do país antes de enviar o formulário
+                const div_dial_code = document.querySelector('.iti__selected-flag');
+                let codigoPais = div_dial_code.textContent.trim();
+                codigoPais = codigoPais.replace('+', '');
+                
+                // const elemento_3 = document.querySelector('.iti__flag-container');
+
+                // const elemento_2 = document.evaluate('/html/body/div/form/div[6]/div/div/div/div/div[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+
+                // Captura os valores dos campos do formulário
+                const formData = {
+                    nome: document.getElementById('nome').value,
+                    idade: parseInt(document.getElementById('idade').value),
+                    valor: parseFloat(document.getElementById('valor').value.replace(',', '.')), // Converte para float e substitui ',' por '.'
+                    data: document.getElementById('data').value,
+                    chavePix: document.getElementById('chave-pix').value,
+                    telefone: codigoPais + phone,
+                    assunto: document.getElementById('assunto').value,
+                    remetente: document.getElementById('remetente').value,
+                    destinatario: document.getElementById('destinatario').value,
+                    corpoMensagem: document.getElementById('corpo-mensagem').value
+                };
+
+                // Envia os dados para o servidor em formato JSON
+                try {
+                    const response = await fetch('/api/email_sns', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ "mensagem": formData})
+                    });
+
+                    if (response.ok) {
+                        // Sucesso
+                        alert('Dados enviados com sucesso!');
+                        // Aqui você pode redirecionar para outra página, se necessário
+                    } else {
+                        // Erro
+                        alert('Erro ao enviar os dados. Por favor, tente novamente.');
+                    }
+                } catch (error) {
+                    // Erro de requisição
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao enviar os dados. Por favor, tente novamente.');
+                }
+
+                // Após o envio, restaura o estado inicial da página
+                resetForm();
+            });
+
+        </script>
+    </body>
+</html>
