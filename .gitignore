@@ -8,3 +8,4 @@ __pycache__/
 # Ignorar arquivos .pyc
 *.pyc
 .pytest_cache/
+sqs_controller.py
