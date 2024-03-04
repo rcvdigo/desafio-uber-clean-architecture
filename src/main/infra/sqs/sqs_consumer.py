@@ -49,21 +49,26 @@ class SqsConsumer(SqsConsumerGateway):
             raise e
 
     def consumer_sqs(self):
+        response_list = []
         try:
-            response = self.__amazon_simple_queu_service.receive_message(
-                QueueUrl= os.getenv('URL_SQS'),
-                AttributeNames=['All'],
-                MessageAttributeNames=['All'],
-                MaxNumberOfMessages=10,
-                WaitTimeSeconds=20
-            )
+            while True:
+                response = self.__amazon_simple_queu_service.receive_message(
+                    QueueUrl= os.getenv('URL_SQS'),
+                    AttributeNames=['All'],
+                    MessageAttributeNames=['All'],
+                    MaxNumberOfMessages=10,
+                    WaitTimeSeconds=2
+                )
+                
+                messages = response.get('Messages', [])
+                if not messages:
+                    break
+                else:
+                    receipt_handles = [msg['ReceiptHandle'] for msg in messages]
+                    extracted_messages = self.__extract_messages(messages=messages)
+                    response_list.append(extracted_messages)
+                    # self.delete_messages(receipt_handles)
 
-            messages = response.get('Messages', [])
-            receipt_handles = [msg['ReceiptHandle'] for msg in messages]
-            extracted_messages = self.__extract_messages(messages=messages)
-            
-            self.delete_messages(receipt_handles)
-            
-            return extracted_messages
+            return response_list
         except Exception as e:
             raise e

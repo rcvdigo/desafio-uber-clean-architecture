@@ -19,7 +19,7 @@ class SqsService(SqsConsumerUseCase):
     def __format_response(cls, response):
         response_format_list = []
         for item in response:
-            data = json.loads(item)
+            data = json.loads(item[0])
             # print("-="*20)
             # print("Name:", data["name"])
             # print("Age:", data["age"])
