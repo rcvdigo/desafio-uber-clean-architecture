@@ -9,3 +9,4 @@ __pycache__/
 *.pyc
 .pytest_cache/
 sqs_controller.py
+sqs_test.py
