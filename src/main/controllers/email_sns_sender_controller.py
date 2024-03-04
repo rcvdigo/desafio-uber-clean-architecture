@@ -6,11 +6,11 @@ from src.main.core.sns_sender_use_case import SnsSenderUseCase
 from src.main.core.email_sender_use_case import EmailSenderUseCase
 from src.main.core.http_request import HttpRequest
 from src.main.core.http_response import HttpResponse
-from typing import Dict
+from typing import Union
 
 class EmailSnsSenderController(ControllerInterface):
 
-    def __init__(self, use_case: SnsSenderUseCase | EmailSenderUseCase) -> None:
+    def __init__(self, use_case: Union[SnsSenderUseCase, EmailSenderUseCase]) -> None:
         self.__use_case = use_case
 
     def handle(
