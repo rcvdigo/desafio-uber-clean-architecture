@@ -1,4 +1,5 @@
 # pylint: disable=import-error
+import json
 from flask import Blueprint
 from flask import request as request_flask
 from flask import render_template
@@ -12,6 +13,7 @@ from src.main.adapters.request_adapter import request_adapter
 # Import from composers
 from src.main.composers.send_sns_composer import send_sns_composer
 from src.main.composers.send_email_composer import send_email_composer
+from src.main.composers.sqs_consumer_composer import sqs_consumer_composer
 from src.main.composers.email_sns_sender_composer import send_email_sns_composer
 
 
@@ -37,7 +39,7 @@ def index():
         return render_template('form.html')
 
 
-@email_route_bp.route("/api/email", methods=["POST"])
+@email_route_bp.route("/api/email/", methods=["POST"])
 def send_email():
     http_response = None
 
@@ -56,7 +58,7 @@ def send_email():
     return jsonify(http_response.body), http_response.status_code
 
 
-@email_route_bp.route("/api/email_sns", methods=["POST"])
+@email_route_bp.route("/api/email_sns/", methods=["POST"])
 def send_email_sns():
     http_response_email = HttpResponse
     http_response_sns = HttpResponse
@@ -102,3 +104,16 @@ def send_email_sns():
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code
+
+
+@email_route_bp.route("/consumer/", methods=["GET"])
+def consumer():
+    try:    
+        http_response_sqs = HttpResponse(
+            body=sqs_consumer_composer(),
+            status_code=200
+        )
+    except Exception as exeception:
+        http_response_sqs = handler_errors(error=exeception)
+
+    return jsonify(http_response_sqs.body), http_response_sqs.status_code
