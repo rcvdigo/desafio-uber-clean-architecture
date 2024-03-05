@@ -1,0 +1,21 @@
+body {
+    padding-top: 50px;
+    background-color: #f8f9fa; /* Cor de fundo semelhante ao BTG */
+    color: #343a40; /* Cor do texto */
+}
+.container {
+    max-width: 500px;
+}
+
+/* Ajuste de largura para o campo de telefone */
+.iti {
+    width: 100% !important;
+}
+
+.form-group.hidden {
+    display: none;
+}
+
+.btn-back {
+    display: none;
+}
