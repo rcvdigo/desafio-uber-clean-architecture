@@ -15,4 +15,4 @@ def sqs_consumer_composer():
     )
     sqs_service = SqsService(use_case=sqs_gateway)
     response = sqs_service.consumer()
-    return response
+    return response['data']

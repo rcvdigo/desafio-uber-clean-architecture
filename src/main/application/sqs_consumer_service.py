@@ -11,27 +11,15 @@ class SqsService(SqsConsumerUseCase):
     
     def consumer(self):
         response = self.__use_case.consumer_sqs()
-        format_response = self.__format_response(response=response)
-        # print(format_response)
-        return format_response
+        return self.__format_response(response=response)
 
     @classmethod
     def __format_response(cls, response):
+        response_format_dict = {}
         response_format_list = []
         for item in response:
             data = json.loads(item[0])
-            # print("-="*20)
-            # print("Name:", data["name"])
-            # print("Age:", data["age"])
-            # print("Value:", data["value"])
-            # print("Date:", data["date"])
-            # print("Key PIX:", data["key_pix"])
-            # print("Source:", data["source"])
-            # print("To:", data["to"])
-            # print("Subject:", data["subject"])
-            # print("Body:", data["body"])
-            # print("Phone Numbers:", data["phone_numbers"])
-            # print("-="*20)
+
             response_format = {
             "type": "SQS",
             "count": len(response),
@@ -48,6 +36,8 @@ class SqsService(SqsConsumerUseCase):
                 "phone_numbers": data["phone_numbers"],
                 }
             }
+
             response_format_list.append(response_format)
             
-        return response_format_list
+        response_format_dict.update({'data': response_format_list})
+        return response_format_dict

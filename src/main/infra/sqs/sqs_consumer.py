@@ -54,10 +54,10 @@ class SqsConsumer(SqsConsumerGateway):
             while True:
                 response = self.__amazon_simple_queu_service.receive_message(
                     QueueUrl= os.getenv('URL_SQS'),
-                    AttributeNames=['All'],
-                    MessageAttributeNames=['All'],
-                    MaxNumberOfMessages=10,
-                    WaitTimeSeconds=2
+                    # AttributeNames=['All'],
+                    # MessageAttributeNames=['All'],
+                    # MaxNumberOfMessages=10,
+                    # WaitTimeSeconds=5
                 )
                 
                 messages = response.get('Messages', [])
