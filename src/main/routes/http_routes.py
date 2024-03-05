@@ -116,4 +116,8 @@ def consumer():
     except Exception as exeception:
         http_response_sqs = handler_errors(error=exeception)
 
-    return jsonify(http_response_sqs.body), http_response_sqs.status_code
+    return render_template(
+        'consumer.html',
+        messages=http_response_sqs.body,
+        status=http_response_sqs.status_code
+        )

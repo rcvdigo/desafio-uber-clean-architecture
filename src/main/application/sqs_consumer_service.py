@@ -22,7 +22,6 @@ class SqsService(SqsConsumerUseCase):
 
             response_format = {
             "type": "SQS",
-            "count": len(response),
             "attributes": {
                 "name": data["name"],
                 "age": data["age"],
@@ -39,5 +38,5 @@ class SqsService(SqsConsumerUseCase):
 
             response_format_list.append(response_format)
             
-        response_format_dict.update({'data': response_format_list})
+        response_format_dict.update({'count': len(response_format_list), 'data': response_format_list})
         return response_format_dict

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Mensageria PIX">
+        <meta property="og:description" content="Rodrigo Camurça | Full Stack Developer">
+        <meta property="og:url" content="https://desafio-uber-clean-architecture.onrender.com/">
+        <meta property="og:image" content="{{ url_for('static', filename='img/share_link.png') }}" />
+        <meta property="og:type" content="website">
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+        crossorigin="anonymous"></script>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.json-editor.min.js') }}"></script>
+
+        <!-- Inclusão do arquivo favicon.svg -->
+        <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
+
+        <!-- Inclusão do arquivo style.css -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style_consumer.css') }}">
+    </head>
+    <body>
+
+        <textarea id="json-input" autocomplete="off" style="display: none;"></textarea>
+
+        <!-- Tratamento de dados recebido do servidor -->
+        <script>
+            // Pegue o conteúdo da variável messages e substitua as aspas simples por aspas duplas
+            var messages = `{{ messages|safe }}`;
+            messages = messages.replace(/'/g, '"');
+        
+            // Defina o valor do elemento textarea com o conteúdo processado
+            document.getElementById('json-input').value = messages;
+        </script>
+
+        <button id="translate" style="display: none;">Translate</button>
+
+        <pre id="json-display"></pre>
+
+        <script type="text/javascript" src="{{ url_for('static', filename='js/translate_button.js') }}"></script>
+
+    </body>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/translate_event.js') }}"></script>
+</html>
+    
