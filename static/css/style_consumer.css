@@ -2,7 +2,6 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    margin: 0px auto 0px;
 }
 #json-input {
     display: block;
@@ -20,6 +19,5 @@ body {
 #json-display {
     border: 1px solid #000;
     width: 100%;
-    margin: 0;
     padding: 10px 20px;
 }
