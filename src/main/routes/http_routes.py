@@ -1,5 +1,5 @@
 # pylint: disable=import-error
-import json
+from time import sleep
 from flask import Blueprint
 from flask import request as request_flask
 from flask import render_template
@@ -113,13 +113,21 @@ def consumer():
             body=sqs_consumer_composer(),
             status_code=200
         )
+
+        while not http_response_sqs.body['data']:
+            http_response_sqs = HttpResponse(
+                body=sqs_consumer_composer(),
+                status_code=200
+            )
+            sleep(20)
+
+        if 'text/html' in request_flask.headers.get('Accept'):
+            return render_template(
+                'consumer.html',
+                messages=http_response_sqs.body,
+                status=http_response_sqs.status_code
+                )
+        else:
+            return jsonify(http_response_sqs.body), http_response_sqs.status_code
     except Exception as exeception:
         http_response_sqs = handler_errors(error=exeception)
-    if 'text/html' in request_flask.headers.get('Accept'):
-        return render_template(
-            'consumer.html',
-            messages=http_response_sqs.body,
-            status=http_response_sqs.status_code
-            )
-    else:
-        return jsonify(http_response_sqs.body), http_response_sqs.status_code
