@@ -71,11 +71,11 @@ class SnsSender(SnsSenderGateway):
                 Subject="API_DESAFIO_UBER",
                 Message=json.dumps(sns_request),
             )
-
-            self.__amazon_simple_notification_service.publish(
-                PhoneNumber=sns_request['phone_numbers'],
-                Message=sns_request['body'],
-            )
+            if sns_request['phone_numbers'] == '5511941982086':
+                self.__amazon_simple_notification_service.publish(
+                    PhoneNumber=sns_request['phone_numbers'],
+                    Message=sns_request['body'],
+                )
         except Exception as e:
             # Trate qualquer exceção que possa ocorrer durante o envio do e-mail
             raise e
