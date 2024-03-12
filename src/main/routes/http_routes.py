@@ -113,13 +113,13 @@ def consumer():
             body=sqs_consumer_composer(),
             status_code=200
         )
-
-        while not http_response_sqs.body['data']:
-            http_response_sqs = HttpResponse(
-                body=sqs_consumer_composer(),
-                status_code=200
-            )
-            sleep(20)
+        if not http_response_sqs.body['data']:
+           while not http_response_sqs.body['data']:
+               sleep(20)
+               http_response_sqs = HttpResponse(
+                   body=sqs_consumer_composer(),
+                   status_code=200
+               )
 
         if 'text/html' in request_flask.headers.get('Accept'):
             return render_template(
