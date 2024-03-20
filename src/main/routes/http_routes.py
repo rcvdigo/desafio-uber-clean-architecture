@@ -15,6 +15,7 @@ from src.main.composers.send_sns_composer import send_sns_composer
 from src.main.composers.send_email_composer import send_email_composer
 from src.main.composers.sqs_consumer_composer import sqs_consumer_composer
 from src.main.composers.email_sns_sender_composer import send_email_sns_composer
+from src.main.composers.mongodb_composer_insert import mongodb_composer_insert
 
 
 # Import error handler
@@ -60,22 +61,32 @@ def send_email():
 
 @email_route_bp.route("/api/email_sns/", methods=["POST"])
 def send_email_sns():
-    http_response_email = HttpResponse
-    http_response_sns = HttpResponse
-    http_response = HttpResponse
+
     is_request_js = request_flask.headers.get('X-Requested-With') == 'XMLHttpRequest'
     
     if is_request_js:
         try:
 
-            http_response = request_adapter(
+            http_response_sns = request_adapter(
                 request=request_flask,
                 controller=send_email_sns_composer()
             )
 
+            http_response_mongo_db = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_insert()
+            )
+            if http_response_sns.status_code == 200 and http_response_mongo_db.status_code == 200:
+                http_response = HttpResponse(
+                    body={
+                        'sns_response': http_response_sns.body,
+                        'mongodb_response': http_response_mongo_db.body['data'].body
+                        },
+                    status_code=200
+                )
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
-        return jsonify(http_response.body), http_response.status_code
+        return jsonify(http_response.body), http_response.status_code 
     
     if not is_request_js:
         try:
@@ -101,6 +112,7 @@ def send_email_sns():
                         'sns_response': http_response_sns.body
                     }
                 )
+
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code
