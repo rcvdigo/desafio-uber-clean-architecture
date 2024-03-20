@@ -10,3 +10,4 @@ __pycache__/
 .pytest_cache/
 sqs_controller.py
 sqs_test.py
+database_test.py
