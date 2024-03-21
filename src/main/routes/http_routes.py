@@ -62,9 +62,9 @@ def send_email():
 @email_route_bp.route("/api/email_sns/", methods=["POST"])
 def send_email_sns():
 
-    is_request_js = request_flask.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    
-    if is_request_js:
+    is_request_js = request_flask.headers.get('X-Requested-With') 
+
+    if is_request_js == 'XMLHttpRequest':
         try:
 
             http_response_sns = request_adapter(
@@ -76,7 +76,11 @@ def send_email_sns():
                 request=request_flask,
                 controller=mongodb_composer_insert()
             )
-            if http_response_sns.status_code == 200 and http_response_mongo_db.status_code == 200:
+
+            # Convertendo ObjectId para string
+            http_response_mongo_db.body['data'].body['_id'] = str(http_response_mongo_db.body['data'].body['_id'])
+
+            if http_response_sns.status_code == 200 and http_response_mongo_db.body['data'].status_code == 200:
                 http_response = HttpResponse(
                     body={
                         'sns_response': http_response_sns.body,
@@ -86,9 +90,9 @@ def send_email_sns():
                 )
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
-        return http_response.body, http_response.status_code 
+        return jsonify(http_response.body), http_response.status_code
     
-    if not is_request_js:
+    if is_request_js != 'XMLHttpRequest':
         try:
             # Protegendo a inserção de dados injetando o validator email_validator
             # email_validator(request=request_flask)
