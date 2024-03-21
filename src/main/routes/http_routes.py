@@ -86,7 +86,7 @@ def send_email_sns():
                 )
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
-        return jsonify(http_response.body), http_response.status_code 
+        return http_response.body, http_response.status_code 
     
     if not is_request_js:
         try:
