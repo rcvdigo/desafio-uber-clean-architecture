@@ -232,7 +232,7 @@ document.querySelector('form').addEventListener('submit', async function(event) 
 
     // Envia os dados para o servidor em formato JSON
     try {
-        const response = await fetch('/api/email_sns', {
+        const response = await fetch('/api/email_sns/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
