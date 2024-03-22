@@ -15,3 +15,6 @@ app = Flask(__name__, template_folder=template_folder, static_folder=static_fold
 
 # Register Blueprints
 app.register_blueprint(blueprint=email_route_bp)
+
+# Define a configuração JSON_SORT_KEYS como False
+app.config['JSON_SORT_KEYS'] = False

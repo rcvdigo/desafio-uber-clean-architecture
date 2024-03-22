@@ -1,5 +1,5 @@
+from bson import ObjectId
 from datetime import date as datetime
-from typing import Dict
 from pymongo import MongoClient
 from pymongo.cursor import Cursor
 from src.main.core.http_response import HttpResponse
@@ -75,8 +75,11 @@ class MongoDb(DatabaseMongodbGateway):
     def update_mongo_db(self, filter: dict[str, str], request: dict[str, str]) -> HttpResponse:
         new_value = {'$set': request}  # Novo valor a ser definido
 
+        # Convertendo str para ObjectId
+        filter['_id'] = ObjectId(filter['_id'])
+        response = self.__collection.update_one(filter, new_value)
         return HttpResponse(
-            body=self.__collection.update_one(filter, new_value).raw_result,
+            body=response.raw_result,
             status_code=200
             )
 

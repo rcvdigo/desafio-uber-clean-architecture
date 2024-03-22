@@ -17,6 +17,7 @@ from src.main.composers.sqs_consumer_composer import sqs_consumer_composer
 from src.main.composers.email_sns_sender_composer import send_email_sns_composer
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_html
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_api
+from src.main.composers.mongodb_composer_update import mongodb_composer_update_api
 
 
 # Import error handler
@@ -119,6 +120,19 @@ def send_email_sns():
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code
+
+@email_route_bp.route("/api/email_sns_update/", methods=["POST"])
+def update_email_sns():
+    is_request_js = request_flask.headers.get('X-Requested-With')
+    if is_request_js == 'XMLHttpRequest':
+        pass
+    if is_request_js != 'XMLHttpRequest':
+        http_response_mongo = request_adapter(
+            request=request_flask,
+            controller=mongodb_composer_update_api()
+        )
+
+        return jsonify(http_response_mongo.body), http_response_mongo.status_code
 
 
 @email_route_bp.route("/consumer/", methods=["GET"])

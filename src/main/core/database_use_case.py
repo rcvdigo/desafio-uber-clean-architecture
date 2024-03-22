@@ -36,7 +36,7 @@ class DatabaseUseCase(ABC):
                   subject: str,
                   body: str,
                   phone_numbers: str
-                  ): pass
+                  ) -> HttpResponse: pass
     
     @abstractmethod
     def delete_db(self): pass
