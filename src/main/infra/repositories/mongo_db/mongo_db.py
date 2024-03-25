@@ -65,21 +65,34 @@ class MongoDb(DatabaseMongodbGateway):
             for data in docs:
                 response.append(data)
 
+            # Convertendo a lista em um dicionário onde a chave é o _id de cada elemento
+            dict_result = {str(item['_id']): item for item in response}
+            
+            # Convertendo os valores _id ObjectId em str
+            for key, value in dict_result.items():
+                value['_id'] = str(value['_id'])
+
             return HttpResponse(
-                body=response,
+                body=dict_result,
                 status_code=200
             )
         except Exception as e:
             raise e
     
     def update_mongo_db(self, filter: dict[str, str], request: dict[str, str]) -> HttpResponse:
-        new_value = {'$set': request}  # Novo valor a ser definido
+        # Novo valor a ser definido
+        new_value = {'$set': request}
 
         # Convertendo str para ObjectId
         filter['_id'] = ObjectId(filter['_id'])
-        response = self.__collection.update_one(filter, new_value)
+        
+        # Execução da ordem de Update
+        self.__collection.update_one(filter, new_value)
+        
+        # Consulta do objeto que foi atualizado
+        response = self.__collection.find_one(filter)
         return HttpResponse(
-            body=response.raw_result,
+            body=response,
             status_code=200
             )
 

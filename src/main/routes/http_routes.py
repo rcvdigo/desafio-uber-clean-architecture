@@ -18,6 +18,7 @@ from src.main.composers.email_sns_sender_composer import send_email_sns_composer
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_html
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_api
 from src.main.composers.mongodb_composer_update import mongodb_composer_update_api
+from src.main.composers.mongodb_composer_select import mongodb_composer_select_api
 
 
 # Import error handler
@@ -132,7 +133,26 @@ def update_email_sns():
             controller=mongodb_composer_update_api()
         )
 
+        return jsonify(
+            {
+                'status': 'update realizado com sucesso!',
+                'response': http_response_mongo.body
+            }), http_response_mongo.status_code
+
+
+@email_route_bp.route("/api/email_sns_select/", methods=["GET"])
+def select_email_sns():
+    is_request_js = request_flask.headers.get('X-Requested-With')
+    if is_request_js == 'XMLHttpRequest':
+        pass
+    if is_request_js != 'XMLHttpRequest':
+        
+        http_response_mongo = request_adapter(
+            request=request_flask,
+            controller=mongodb_composer_select_api()
+        )
         return jsonify(http_response_mongo.body), http_response_mongo.status_code
+
 
 
 @email_route_bp.route("/consumer/", methods=["GET"])
