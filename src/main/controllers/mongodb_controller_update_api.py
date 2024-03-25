@@ -39,18 +39,7 @@ class MongodbControllerUpdateApi(ControllerInterface):
             body=body,
             phone_numbers=phone_numbers
         )
-
-        response.body['electionId'] = str(response.body['electionId'])
-        # Conversão em int
-        response.body['opTime']['ts'] = response.body['opTime']['ts'].time
-        # Conversão em int
-        response.body['$clusterTime']['clusterTime'] = response.body['$clusterTime']['clusterTime'].time
-        # Conversão em Hexadecimal
-        response.body['$clusterTime']['signature']['hash'] = response.body['$clusterTime']['signature']['hash'].hex()
-        response.body['$clusterTime']['signature']['keyId'] = int(response.body['$clusterTime']['signature']['keyId'])
-        # Conversão em int
-        response.body['operationTime'] = response.body['operationTime'].time
-
+        response.body['_id'] = str(response.body['_id'])
         return HttpResponse(
             status_code=200,
             body=response.body
