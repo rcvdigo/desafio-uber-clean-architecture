@@ -122,6 +122,7 @@ def send_email_sns():
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code
 
+
 @email_route_bp.route("/api/email_sns_update/", methods=["POST"])
 def update_email_sns():
     is_request_js = request_flask.headers.get('X-Requested-With')
@@ -154,7 +155,6 @@ def select_email_sns():
         return jsonify(http_response_mongo.body), http_response_mongo.status_code
 
 
-
 @email_route_bp.route("/consumer/", methods=["GET"])
 def consumer():
     try:    
@@ -165,10 +165,14 @@ def consumer():
         if not http_response_sqs.body['data']:
            while not http_response_sqs.body['data']:
                sleep(20)
+               count = 0
                http_response_sqs = HttpResponse(
                    body=sqs_consumer_composer(),
                    status_code=200
                )
+               count += 1
+               if count == 3:
+                   break
 
         if 'text/html' in request_flask.headers.get('Accept'):
             return render_template(
