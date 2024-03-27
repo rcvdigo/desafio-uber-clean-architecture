@@ -13,7 +13,7 @@ def mongodb_composer_select_api():
         name_db='bancoMongoDB',
         name_collection='desafio_dio'
     )
-    database_mongodb_service = DatabaseService(use_case=database_mongodb_use_case)
+    database_mongodb_service = DatabaseService(mongodb_gateway=database_mongodb_use_case)
     controller = MongodbControllerSelectApi(use_case=database_mongodb_service)
     
     return controller.handle
