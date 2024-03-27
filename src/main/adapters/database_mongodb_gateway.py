@@ -30,4 +30,6 @@ class DatabaseMongodbGateway(ABC):
                         ) -> HttpResponse: pass
     
     @abstractmethod
-    def delete_mongo_db(self): pass
+    def delete_mongo_db(self,
+                        filter: dict[str, str]
+                        )-> HttpResponse: pass
