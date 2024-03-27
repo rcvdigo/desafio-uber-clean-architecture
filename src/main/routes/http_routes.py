@@ -126,11 +126,19 @@ def send_email_sns():
 
 @email_route_bp.route("/api/select/", methods=["GET"])
 def select():
-    is_request_js = request_flask.headers.get('X-Requested-With')
-    if is_request_js == 'XMLHttpRequest':
-        pass
-    if is_request_js != 'XMLHttpRequest':
-        
+    is_request = request_flask.headers.get('Accept').split(',')[0]
+    if is_request == 'text/html':
+        http_response_mongo = request_adapter(
+            request=request_flask,
+            controller=mongodb_composer_select_api()
+        )
+        return render_template(
+            'mongodb_select.html',
+            http_body=http_response_mongo.body,
+            http_status=http_response_mongo.status_code
+            )
+    
+    if is_request != 'text/html':
         http_response_mongo = request_adapter(
             request=request_flask,
             controller=mongodb_composer_select_api()

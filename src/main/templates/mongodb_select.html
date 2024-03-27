@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Mensageria PIX">
+        <meta property="og:description" content="Rodrigo Camurça | Full Stack Developer">
+        <meta property="og:url" content="https://desafio-uber-clean-architecture.onrender.com/">
+        
+
+        <meta property="og:image" content="https://raw.githubusercontent.com/rcvdigo/desafio-uber-clean-architecture/main/static/img/share_link.png"/>
+
+
+        <meta property="og:image:secure_url" content="https://raw.githubusercontent.com/rcvdigo/desafio-uber-clean-architecture/main/static/img/share_link.png"/>
+
+        <meta property="og:type" content="website">
+        <title>Mensageria PIX Select</title>
+        <!-- Links para os scripts Bootstrap -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Inclusão do arquivo style.css -->
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <!-- Inclusão do arquivo favicon.svg -->
+        <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>Valor</th>
+                        <th>Data</th>
+                        <th>Chave Pix</th>
+                        <th>Destinatário</th>
+                        <th>Para</th>
+                        <th>Assunto</th>
+                        <th>Corpo da mensagem</th>
+                        <th>Telefones</th>
+                        <!-- Adicione mais cabeçalhos conforme necessário -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for id, dados_pessoa in http_body.items() %}
+                        <tr>
+                            <td>{{ id }}</td>
+                            <td>{{ dados_pessoa.name }}</td>
+                            <td>{{ dados_pessoa.age }}</td>
+                            <td>{{ dados_pessoa.value }}</td>
+                            <td>{{ dados_pessoa.date }}</td>
+                            <td>{{ dados_pessoa.key_pix }}</td>
+                            <td>{{ dados_pessoa.source }}</td>
+                            <td>{{ dados_pessoa.to }}</td>
+                            <td>{{ dados_pessoa.subject }}</td>
+                            <td>{{ dados_pessoa.body }}</td>
+                            <td>{{ dados_pessoa.phone_numbers }}</td>
+                            <!-- Adicione mais colunas conforme necessário -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
