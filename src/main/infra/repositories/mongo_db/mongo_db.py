@@ -96,9 +96,23 @@ class MongoDb(DatabaseMongodbGateway):
             status_code=200
             )
 
-    def delete_mongo_db(self):
-        # Removendo um documento da coleção
-        filter = {"chave": "valor"}  # Filtro para encontrar o documento a ser removido
+    def delete_mongo_db(self,
+                         filter: dict[str, str]
+                         )-> HttpResponse:
+        # Convertendo str para ObjectId
+        filter['_id'] = ObjectId(filter['_id'])
 
         # Removendo o documento
-        self.__collection.delete_one(filter)
+        response = self.__collection.delete_one(filter)
+
+        # Se o dado for deletado com sucesso
+        if response.acknowledged == 1.0:
+            return HttpResponse(
+                body=response.acknowledged,
+                status_code=200
+            )
+        else:
+            return HttpResponse(
+                body=response.acknowledged,
+                status_code=500
+            )

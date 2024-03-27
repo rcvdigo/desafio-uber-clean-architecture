@@ -7,9 +7,9 @@ from src.main.adapters.database_mongodb_gateway import DatabaseMongodbGateway
 class DatabaseService(DatabaseUseCase):
 
     def __init__(self,
-                 use_case: DatabaseMongodbGateway
+                 mongodb_gateway: DatabaseMongodbGateway
                  ) -> None:
-        self.__use_case = use_case
+        self.__mongodb_gateway = mongodb_gateway
 
     def insert_db(self,
                   name: str,
@@ -24,7 +24,7 @@ class DatabaseService(DatabaseUseCase):
                   phone_numbers: str
                   ) -> HttpResponse:
         try:
-            return self.__use_case.insert_mongo_db(
+            return self.__mongodb_gateway.insert_mongo_db(
                 name=name,
                 age=age,
                 value=value,
@@ -41,7 +41,7 @@ class DatabaseService(DatabaseUseCase):
 
     def select_db(self):
         try:
-            return self.__use_case.select_mongo_db()
+            return self.__mongodb_gateway.select_mongo_db()
         except Exception as e:
             raise e
     
@@ -59,7 +59,7 @@ class DatabaseService(DatabaseUseCase):
                   phone_numbers: str
                   ):
         try:
-            filter = {'_id':_id}
+            filter = {'_id': _id}
             request = {
                 'name': name,
                 'age': age,
@@ -72,9 +72,13 @@ class DatabaseService(DatabaseUseCase):
                 'body': body,
                 'phone_numbers': phone_numbers
             }
-            return self.__use_case.update_mongo_db(filter=filter, request=request)
+            return self.__mongodb_gateway.update_mongo_db(filter=filter, request=request)
         except Exception as e:
             raise e
     
-    def delete_db(self):
-        pass
+    def delete_db(self, _id: str) -> HttpResponse:
+        try:
+            filter = {'_id': _id}
+            return self.__mongodb_gateway.delete_mongo_db(filter=filter)
+        except Exception as e:
+            raise e
