@@ -39,4 +39,6 @@ class DatabaseUseCase(ABC):
                   ) -> HttpResponse: pass
     
     @abstractmethod
-    def delete_db(self): pass
+    def delete_db(self,
+                  _id: str
+                  )-> HttpResponse: pass
