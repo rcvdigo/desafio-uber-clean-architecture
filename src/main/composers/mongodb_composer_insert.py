@@ -14,7 +14,7 @@ def mongodb_composer_insert_html():
         name_db='bancoMongoDB',
         name_collection='desafio_dio'
     )
-    database_mongodb_service = DatabaseService(use_case=database_mongodb_use_case)
+    database_mongodb_service = DatabaseService(mongodb_gateway=database_mongodb_use_case)
     controller = MongodbControllerInsertHtml(use_case=database_mongodb_service)
     
     return controller.handle
