@@ -298,7 +298,7 @@
                 autoPlaceholder: "aggressive", // Adiciona automaticamente o código do país quando o campo está vazio
             });
 
-            document.addEventListener('DOMContentLoaded', function(url) {
+            document.addEventListener('DOMContentLoaded', function() {
                 // Adiciona um evento de clique aos botões de atualização
                 document.querySelectorAll('.btn-atualizar').forEach(button => {
                     button.addEventListener('click', function() {
@@ -344,7 +344,7 @@
                             console.log(data);
                             
                             // Redireciona para a consulta de todos objetos
-                            window.location.href = 'https://desafio-uber-clean-architecture.onrender.com/api/select/';
+                            window.location.href ='https://desafio-uber-clean-architecture.onrender.com/api/select/';
                         })
                         .catch(error => {
                             console.error('Erro ao atualizar os dados:', error);
