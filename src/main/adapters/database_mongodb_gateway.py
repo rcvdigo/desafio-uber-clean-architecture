@@ -24,6 +24,9 @@ class DatabaseMongodbGateway(ABC):
     def select_mongo_db(self) -> HttpResponse: pass
     
     @abstractmethod
+    def select_mongo_db_id(self, id: dict[str, str]) -> HttpResponse: pass
+    
+    @abstractmethod
     def update_mongo_db(self,
                         filter: dict[str, str],
                         request: dict[str, str]

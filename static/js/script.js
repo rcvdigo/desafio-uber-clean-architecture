@@ -202,19 +202,10 @@ document.querySelector('form').addEventListener('submit', async function(event) 
     // Remove os espaços em branco e o caractere "-" do número de telefone
     phone = phone.replace(/\s+/g, '').replace('-', '');
 
-    // Captura o valor do código do país
-    // const div_dial_code = document.querySelector('.iti__selected-flag');
-
-    // console.log(div_dial_code);
-
     // Extrai o código do país antes de enviar o formulário
     const div_dial_code = document.querySelector('.iti__selected-flag');
     let codigoPais = div_dial_code.textContent.trim();
     codigoPais = codigoPais.replace('+', '');
-    
-    // const elemento_3 = document.querySelector('.iti__flag-container');
-
-    // const elemento_2 = document.evaluate('/html/body/div/form/div[6]/div/div/div/div/div[2]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 
     // Captura os valores dos campos do formulário
     const formData = {

@@ -78,6 +78,19 @@ class MongoDb(DatabaseMongodbGateway):
             )
         except Exception as e:
             raise e
+        
+    def select_mongo_db_id(self, id: dict[str, str]) -> HttpResponse:
+        
+        id = ObjectId(id['_id'])
+        
+        response = self.__collection.find_one(filter=id)
+       
+        response['_id'] = str(response['_id'])
+
+        return HttpResponse(
+            body=response,
+            status_code=200
+        )
     
     def update_mongo_db(self, filter: dict[str, str], request: dict[str, str]) -> HttpResponse:
         # Novo valor a ser definido

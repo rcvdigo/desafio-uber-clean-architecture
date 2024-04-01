@@ -39,9 +39,15 @@ class DatabaseService(DatabaseUseCase):
         except Exception as e:
             raise e
 
-    def select_db(self):
+    def select_db(self) -> HttpResponse:
         try:
             return self.__mongodb_gateway.select_mongo_db()
+        except Exception as e:
+            raise e
+        
+    def select_db_id(self, id) -> HttpResponse:
+        try:
+            return self.__mongodb_gateway.select_mongo_db_id(id=id)
         except Exception as e:
             raise e
     

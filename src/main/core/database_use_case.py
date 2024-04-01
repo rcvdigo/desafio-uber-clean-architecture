@@ -22,6 +22,9 @@ class DatabaseUseCase(ABC):
    
     @abstractmethod
     def select_db(self) -> HttpResponse: pass
+
+    @abstractmethod
+    def select_db_id(self, id) -> HttpResponse: pass
     
     @abstractmethod
     def update_db(self,

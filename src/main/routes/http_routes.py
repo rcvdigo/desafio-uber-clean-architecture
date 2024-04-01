@@ -20,6 +20,7 @@ from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_a
 from src.main.composers.mongodb_composer_update import mongodb_composer_update_api
 from src.main.composers.mongodb_composer_select import mongodb_composer_select_api
 from src.main.composers.mongodb_composer_delete import mongodb_composer_delete_api
+from src.main.composers.mongodb_composer_select_id import mongodb_composer_select_id_html
 
 
 # Import error handler
@@ -146,11 +147,38 @@ def select():
         return jsonify(http_response_mongo.body), http_response_mongo.status_code
 
 
-@email_route_bp.route("/api/update/", methods=["POST"])
+@email_route_bp.route("/view/<_id>/", methods=["GET"])
+def view(_id):
+    
+    http_response_mongo = request_adapter(
+        request=request_flask,
+        controller=mongodb_composer_select_id_html()
+    )
+
+    return render_template(
+        'view.html',
+        http_response=http_response_mongo.body,
+        http_status=http_response_mongo.status_code
+    )
+
+
+@email_route_bp.route("/api/update/", methods=['POST'])
 def update():
     is_request_js = request_flask.headers.get('X-Requested-With')
+
     if is_request_js == 'XMLHttpRequest':
-        pass
+
+        http_response_mongo = request_adapter(
+            request=request_flask,
+            controller=mongodb_composer_update_api()
+        )
+        
+        return jsonify(
+            {
+                'status': 'update realizado com sucesso!',
+                'response': http_response_mongo.body
+            }), http_response_mongo.status_code
+    
     if is_request_js != 'XMLHttpRequest':
         http_response_mongo = request_adapter(
             request=request_flask,
