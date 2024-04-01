@@ -22,6 +22,9 @@
         <!-- Inclusão do arquivo favicon.svg -->
         <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='svg/favicon.svg') }}">
         <style>
+            body {
+                padding-top: 35px;
+            }
             table {
                 width: 100%;
                 border-collapse: collapse;
@@ -39,6 +42,7 @@
     </head>
     <body>
         <div>
+            <h1 class="text-center mb-4">Mensageria PIX <img style="margin-top: -5px;" src="{{ url_for('static', filename='svg/pix.svg') }}" alt="Logo PIX"></h1>
             <table>
                 <thead>
                     <tr>
@@ -76,7 +80,7 @@
                                 <a href="/view/{{id}}/" class="btn btn-primary btn-visualizar" >Visualizar</a>
                             </td>
                             <td>
-                                <a class="btn btn-danger btn-excluir">Excluir</a>
+                                <a href="#" class="btn btn-danger btn-excluir" data-id="{{ id }}">Excluir</a>
                             </td>
                             <!-- Adicione mais colunas conforme necessário -->
                         </tr>
@@ -84,5 +88,40 @@
                 </tbody>
             </table>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Adiciona um evento de clique aos botões de exclusão
+                document.querySelectorAll('.btn-excluir').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        // Previne o comportamento padrão do link
+                        event.preventDefault();
+                        
+                        // Obtém o ID do item a ser excluído
+                        const id = this.getAttribute('data-id');
+                        
+                        // Envia uma solicitação POST para o endpoint de exclusão
+                        fetch('/api/delete/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify({_id: id})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Exibe uma mensagem de sucesso ou erro, ou atualiza a página conforme necessário
+                            console.log(data);
+
+                            // Recarrega a página após a exclusão bem-sucedida
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.error('Erro ao excluir o item:', error);
+                        });
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

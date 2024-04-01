@@ -196,7 +196,16 @@ def update():
 def delete():
     is_request_js = request_flask.headers.get('X-Requested-With')
     if is_request_js == 'XMLHttpRequest':
-        pass
+        http_response_mongo = request_adapter(
+            request=request_flask,
+            controller=mongodb_composer_delete_api()
+        )
+        return jsonify(
+            {
+                'status': 'delete realizado com sucesso!',
+                'response': http_response_mongo.body
+            }), http_response_mongo.status_code
+
     if is_request_js != 'XMLHttpRequest':
         http_response_mongo = request_adapter(
             request=request_flask,

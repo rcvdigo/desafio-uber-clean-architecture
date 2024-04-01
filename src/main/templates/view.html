@@ -102,7 +102,6 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js">            
         </script>
-        <!-- Inclusão do arquivo script.js -->
         <script>
             // Variaveis de controle para avançar e voltar
             let currentStep = 1;
@@ -299,7 +298,7 @@
                 autoPlaceholder: "aggressive", // Adiciona automaticamente o código do país quando o campo está vazio
             });
 
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function(url) {
                 // Adiciona um evento de clique aos botões de atualização
                 document.querySelectorAll('.btn-atualizar').forEach(button => {
                     button.addEventListener('click', function() {
@@ -328,10 +327,9 @@
                             to: document.getElementById('destinatario').value,
                             body: document.getElementById('corpo-mensagem').value
                         };
-
-                        // Aqui você pode enviar uma solicitação AJAX para o servidor Flask
+                        
+                        // Solicitação AJAX para o servidor Flask
                         // para realizar a atualização dos dados com base no ID
-                        // Exemplo usando fetch:
                         fetch('/api/update/', {
                             method: 'POST',
                             headers: {
@@ -344,8 +342,9 @@
                         .then(data => {
                             // Exibe mensagem de sucesso ou erro, ou atualiza a página conforme necessário
                             console.log(data);
-                            // Recarrega a página após a atualização bem-sucedida
-                            location.reload();
+                            
+                            // Redireciona para a consulta de todos objetos
+                            window.location.href = 'https://desafio-uber-clean-architecture.onrender.com/api/select/';
                         })
                         .catch(error => {
                             console.error('Erro ao atualizar os dados:', error);
