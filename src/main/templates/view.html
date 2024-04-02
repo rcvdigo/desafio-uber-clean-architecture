@@ -300,7 +300,10 @@
 
             
             // Adiciona um evento de clique aos botões de atualização
-            document.getElementById('submitBtn').addEventListener('click', function() {
+            document.getElementById('submitBtn').addEventListener('click', function(event) {
+                    // Impede o comportamento padrão de submissão do formulário
+                    event.preventDefault();
+                    
                     // Captura o valor do número de telefone
                     let phone = document.getElementById('telefone').value;
 
@@ -350,9 +353,6 @@
                         console.error('Erro ao atualizar os dados:', error);
                     });
                 });
-
-                // Adicione eventos semelhantes para os botões de exclusão, se necessário
-            ;
         </script>
     </body>
 </html>
