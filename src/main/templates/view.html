@@ -298,11 +298,12 @@
                 autoPlaceholder: "aggressive", // Adiciona automaticamente o código do país quando o campo está vazio
             });
 
-            
-            // Adiciona um evento de clique aos botões de atualização
-            document.getElementById('submitBtn').addEventListener('click', function() {
-                    // Captura o valor do número de telefone
-                    let phone = document.getElementById('telefone').value;
+            document.addEventListener('DOMContentLoaded', function(url) {
+                // Adiciona um evento de clique aos botões de atualização
+                document.querySelectorAll('.btn-atualizar').forEach(button => {
+                    button.addEventListener('click', function() {
+                        // Captura o valor do número de telefone
+                        let phone = document.getElementById('telefone').value;
 
                     // Remove os espaços em branco e o caractere "-" do número de telefone
                     phone = phone.replace(/\s+/g, '').replace('-', '');
@@ -312,40 +313,42 @@
                     let codigoPais = div_dial_code.textContent.trim();
                     codigoPais = codigoPais.replace('+', '');
 
-                    // Captura os valores dos campos do formulário
-                    const formData = {
-                        _id: '{{http_response._id}}',
-                        name: document.getElementById('nome').value,
-                        age: parseInt(document.getElementById('idade').value),
-                        value: parseFloat(document.getElementById('valor').value.replace(',', '.')), // Converte para float e substitui ',' por '.'
-                        date: document.getElementById('data').value,
-                        key_pix: document.getElementById('chave-pix').value,
-                        phone_numbers: codigoPais + phone,
-                        subject: document.getElementById('assunto').value,
-                        source: document.getElementById('remetente').value,
-                        to: document.getElementById('destinatario').value,
-                        body: document.getElementById('corpo-mensagem').value
-                    };
-                    
-                    // Solicitação AJAX para o servidor Flask
-                    // para realizar a atualização dos dados com base no ID
-                    fetch('/api/update/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify( formData )
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        // Exibe mensagem de sucesso ou erro, ou atualiza a página conforme necessário
-                        console.log(data);
-                        // Redireciona para o endpoint '/api/select/'
-                       window.location.href = '/api/select/';
-                    })
-                    .catch(error => {
-                        console.error('Erro ao atualizar os dados:', error);
+                        // Captura os valores dos campos do formulário
+                        const formData = {
+                            _id: '{{http_response._id}}',
+                            name: document.getElementById('nome').value,
+                            age: parseInt(document.getElementById('idade').value),
+                            value: parseFloat(document.getElementById('valor').value.replace(',', '.')), // Converte para float e substitui ',' por '.'
+                            date: document.getElementById('data').value,
+                            key_pix: document.getElementById('chave-pix').value,
+                            phone_numbers: codigoPais + phone,
+                            subject: document.getElementById('assunto').value,
+                            source: document.getElementById('remetente').value,
+                            to: document.getElementById('destinatario').value,
+                            body: document.getElementById('corpo-mensagem').value
+                        };
+                        
+                        // Solicitação AJAX para o servidor Flask
+                        // para realizar a atualização dos dados com base no ID
+                        fetch('/api/update/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
+                            body: JSON.stringify( formData )
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            // Exibe mensagem de sucesso ou erro, ou atualiza a página conforme necessário
+                            console.log(data);
+                            
+                            // Redireciona para a consulta de todos objetos
+                            window.location.href = 'https://desafio-uber-clean-architecture.onrender.com/api/select/';
+                        })
+                        .catch(error => {
+                            console.error('Erro ao atualizar os dados:', error);
+                        });
                     });
                 });
 
