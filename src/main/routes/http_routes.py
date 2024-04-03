@@ -21,6 +21,8 @@ from src.main.composers.mongodb_composer_update import mongodb_composer_update_a
 from src.main.composers.mongodb_composer_select import mongodb_composer_select_api
 from src.main.composers.mongodb_composer_delete import mongodb_composer_delete_api
 from src.main.composers.mongodb_composer_select_id import mongodb_composer_select_id_html
+from src.main.composers.postgresql_composer_insert import postgresql_composer_insert_api
+from src.main.composers.postgresql_composer_insert import postgresql_composer_insert_html
 
 
 # Import error handler
@@ -73,21 +75,32 @@ def send_email_sns():
                 request=request_flask,
                 controller=send_email_sns_composer()
             )
+
             http_response_mongo_db = request_adapter(
                 request=request_flask,
                 controller=mongodb_composer_insert_html()
             )
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_insert_html()
+            )
+
             if (
                 http_response_sns.status_code == 200
                 and http_response_mongo_db.status_code == 200
+                and http_response_postgresql.status_code == 200
                 ):
+
                 http_response = HttpResponse(
                     body={
                         'sns_response': http_response_sns.body,
-                        'mongodb_response': http_response_mongo_db.body
+                        'mongodb_response': http_response_mongo_db.body,
+                        'postgresql_response': http_response_postgresql.body,
                         },
                     status_code=200
                 )
+
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code
@@ -95,31 +108,43 @@ def send_email_sns():
         try:
             # Protegendo a inserção de dados injetando o validator email_validator
             # email_validator(request=request_flask)
+            
             http_response_email = request_adapter(
                 request=request_flask,
                 controller=send_email_composer()
             )
+
             http_response_sns = request_adapter(
                 request=request_flask,
                 controller=send_sns_composer()
             )
+
             http_response_mongo_db = request_adapter(
                 request=request_flask,
                 controller=mongodb_composer_insert_api()
             )
+            
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_insert_api()
+            )
+
             if (
                 http_response_email.status_code == 200
                 and http_response_sns.status_code == 200
                 and http_response_mongo_db.status_code == 200
+                and http_response_postgresql.status_code == 200
                 ):
                 http_response = HttpResponse(
                     status_code=200,
                     body={
                         'email_response': http_response_email.body,
                         'sns_response': http_response_sns.body,
-                        'mongobd_response': http_response_mongo_db.body
+                        'mongobd_response': http_response_mongo_db.body,
+                        'postgresql_response': http_response_postgresql.body
                     }
                 )
+
         except Exception as exeception:
             http_response = handler_errors(error=exeception)
         return jsonify(http_response.body), http_response.status_code

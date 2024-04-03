@@ -3,13 +3,13 @@ from sqlalchemy import create_engine
 
 
 class DbConnectionHandler:
-    def __init__(self, connection_string: str = 'postgresql://desafio_uber_clean_architecture_user:Q8zvXP8NJdZOH40fhLnI2O4qU4Wtc49m@dpg-co62k1cf7o1s73aae2dg-a.oregon-postgres.render.com:5432/desafio_uber_clean_architecture'):
+    def __init__(self, connection_string: str):
         self.__connection_string = connection_string
         self.__engine = create_engine(self.__connection_string)
-        self.__Session = sessionmaker(bind=self.__engine)
+        self.__session = sessionmaker(bind=self.__engine)
     
     def __enter__(self):
-        self.session = self.__Session()
+        self.session = self.__session()
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):

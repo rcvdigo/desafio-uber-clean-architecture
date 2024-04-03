@@ -7,9 +7,10 @@ from src.main.models.messages import Messages
 
 
 class Postgresql(DatabasePostgresqlGateway):
+    def __init__(self, connection_string: str) -> None:
+        self.__connection_string = connection_string
 
-    @classmethod
-    def insert_postgresql(cls,
+    def insert_postgresql(self,
                           name: str,
                           age: int,
                           value: float,
@@ -20,8 +21,8 @@ class Postgresql(DatabasePostgresqlGateway):
                           subject: str,
                           body: str,
                           phone_numbers: str
-                          ) -> List[Messages]:
-        with DbConnectionHandler() as database:
+                          ) -> dict[str, str]:
+        with DbConnectionHandler(connection_string=self.__connection_string) as database:
             try:
                 new_registry = MessagesEntity(
                     name=name,
@@ -37,12 +38,25 @@ class Postgresql(DatabasePostgresqlGateway):
                 )
                 database.session.add(new_registry)
                 database.session.commit()
+                new_registry = {
+                    'name': name,
+                    'age': age,
+                    'value': value,
+                    'date': date.strftime("%d/%m/%Y"),
+                    'key_pix': key_pix,
+                    'source': source,
+                    'to': to,
+                    'subject': subject,
+                    'body': body,
+                    'phone_numbers': phone_numbers
+                }
+                return new_registry
             except Exception as e:
                 database.session.rollback()
                 raise e
 
     def select_postgresql(self) -> List[Messages]:
-        with DbConnectionHandler() as database:
+        with DbConnectionHandler(connection_string=self.__connection_string) as database:
             try:
                 messages = (
                     database.session
@@ -54,11 +68,11 @@ class Postgresql(DatabasePostgresqlGateway):
                 database.session.rollback()
                 raise e
     
-    @classmethod
-    def select_postgresql_id(cls,
+
+    def select_postgresql_id(self,
                              id: int
                              ) -> List[Messages]:
-        with DbConnectionHandler() as database:
+        with DbConnectionHandler(connection_string=self.__connection_string) as database:
             try:
                 messages = (
                     database.session
@@ -72,7 +86,7 @@ class Postgresql(DatabasePostgresqlGateway):
                 raise e
 
     def update_postgresql(self, filter: int, request: dict[str, str]) -> List[Messages]:
-        with DbConnectionHandler() as database:
+        with DbConnectionHandler(connection_string=self.__connection_string) as database:
             try:
                 # Consultando objeto usando id como filtro
                 messages_update = (
@@ -111,7 +125,7 @@ class Postgresql(DatabasePostgresqlGateway):
                 raise e
     
     def delete_postgresql(self, filter: int) -> List[Messages]:
-        with DbConnectionHandler() as database:
+        with DbConnectionHandler(connection_string=self.__connection_string) as database:
             try:
                 # Query para encontrar a mensagem com o ID fornecido
                 message_to_delete = (

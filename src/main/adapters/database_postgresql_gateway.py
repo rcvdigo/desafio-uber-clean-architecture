@@ -21,7 +21,7 @@ class DatabasePostgresqlGateway(ABC):
                         subject: str,
                         body: str,
                         phone_numbers: str
-                        ) -> List[Messages]: pass
+                        ) -> dict[str, str]: pass
    
     @abstractmethod
     def select_postgresql(self) -> List[Messages]: pass
