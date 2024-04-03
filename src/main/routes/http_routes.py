@@ -23,6 +23,7 @@ from src.main.composers.mongodb_composer_delete import mongodb_composer_delete_a
 from src.main.composers.mongodb_composer_select_id import mongodb_composer_select_id_html
 from src.main.composers.postgresql_composer_insert import postgresql_composer_insert_api
 from src.main.composers.postgresql_composer_insert import postgresql_composer_insert_html
+from src.main.composers.postgresql_composer_select import postgresql_composer_select_api
 
 
 # Import error handler
@@ -154,13 +155,21 @@ def send_email_sns():
 def select():
     is_request = request_flask.headers.get('Accept').split(',')[0]
     if is_request == 'text/html':
+        
         http_response_mongo = request_adapter(
             request=request_flask,
             controller=mongodb_composer_select_api()
         )
+
+        http_response_postgresql = request_adapter(
+            request=request_flask,
+            controller=postgresql_composer_select_api()
+        )
+
         return render_template(
             'mongodb_select.html',
-            http_body=http_response_mongo.body,
+            http_response_mongo=http_response_mongo.body,
+            http_response_postgresql=http_response_postgresql.body,
             http_status=http_response_mongo.status_code
             )
     

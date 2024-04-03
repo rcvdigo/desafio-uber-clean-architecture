@@ -63,7 +63,30 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for id, dados_pessoa in http_body.items() %}
+                    {% for id, dados_pessoa in http_response_mongo.items() %}
+                        <tr data-id="{{id}}">
+                            <td>{{ id }}</td>
+                            <td>{{ dados_pessoa.name }}</td>
+                            <td>{{ dados_pessoa.age }}</td>
+                            <td>{{ dados_pessoa.value }}</td>
+                            <td>{{ dados_pessoa.date }}</td>
+                            <td>{{ dados_pessoa.key_pix }}</td>
+                            <td>{{ dados_pessoa.source }}</td>
+                            <td>{{ dados_pessoa.to }}</td>
+                            <td>{{ dados_pessoa.subject }}</td>
+                            <td>{{ dados_pessoa.body }}</td>
+                            <td>{{ dados_pessoa.phone_numbers }}</td>
+                            <td>
+                                <a href="/view/{{id}}/" class="btn btn-primary btn-visualizar" >Visualizar</a>
+                            </td>
+                            <td>
+                                <a href="#" class="btn btn-danger btn-excluir" data-id="{{ id }}">Excluir</a>
+                            </td>
+                            <!-- Adicione mais colunas conforme necessário -->
+                        </tr>
+                    {% endfor %}
+
+                    {% for id, dados_pessoa in http_response_postgresql.items() %}
                         <tr data-id="{{id}}">
                             <td>{{ id }}</td>
                             <td>{{ dados_pessoa.name }}</td>
