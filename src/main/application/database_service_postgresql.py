@@ -110,7 +110,7 @@ class DatabaseServicePostgresql(DatabaseUseCase):
                   subject: str,
                   body: str,
                   phone_numbers: str
-                  ):
+                  ) -> HttpResponse:
         try:
             filter = id
             request = {
@@ -125,7 +125,28 @@ class DatabaseServicePostgresql(DatabaseUseCase):
                 'body': body,
                 'phone_numbers': phone_numbers
             }
-            return self.__postgresql_gateway.update_postgresql(filter=filter, request=request)
+
+            message_update = self.__postgresql_gateway.update_postgresql(filter=filter, request=request)
+
+            for msg in message_update:
+                message_dict={
+                    'id': msg.id,
+                    'name': msg.name,
+                    'age': msg.age,
+                    'value': msg.value,
+                    'date': msg.date.strftime("%Y-%m-%d"),
+                    'key_pix': msg.key_pix,
+                    'source': msg.source,
+                    'to': msg.to,
+                    'subject': msg.subject,
+                    'body': msg.body,
+                    'phone_numbers': msg.phone_numbers
+                    }
+
+            return HttpResponse(
+                status_code=200,
+                body=message_dict
+            )
         except Exception as e:
             raise e
     

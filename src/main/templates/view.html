@@ -318,6 +318,7 @@
                     // Captura os valores dos campos do formulário
                     const formData = {
                         _id: '{{http_response._id}}',
+                        id: '{{http_response.id}}',
                         name: document.getElementById('nome').value,
                         age: parseInt(document.getElementById('idade').value),
                         value: parseFloat(document.getElementById('valor').value.replace(',', '.')), // Converte para float e substitui ',' por '.'

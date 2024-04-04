@@ -18,6 +18,7 @@ from src.main.composers.email_sns_sender_composer import send_email_sns_composer
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_html
 from src.main.composers.mongodb_composer_insert import mongodb_composer_insert_api
 from src.main.composers.mongodb_composer_update import mongodb_composer_update_api
+from src.main.composers.postgresql_composer_update import postgresql_composer_update
 from src.main.composers.mongodb_composer_select import mongodb_composer_select_api
 from src.main.composers.mongodb_composer_delete import mongodb_composer_delete_api
 from src.main.composers.mongodb_composer_select_id import mongodb_composer_select_id_html
@@ -237,7 +238,7 @@ def view(_id):
             request=request_flask,
             controller=postgresql_composer_select_id()
         )
-        
+
         return render_template(
             'view.html',
             http_response=http_response_postgresql.body,
@@ -252,16 +253,32 @@ def update():
 
     if is_request_js == 'XMLHttpRequest':
 
-        http_response_mongo = request_adapter(
-            request=request_flask,
-            controller=mongodb_composer_update_api()
-        )
+        if request_flask.json['_id'] != '':
+
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_update_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'update realizado com sucesso!',
+                    'response': http_response_mongo.body
+                }), http_response_mongo.status_code
         
-        return jsonify(
-            {
-                'status': 'update realizado com sucesso!',
-                'response': http_response_mongo.body
-            }), http_response_mongo.status_code
+        elif request_flask.json['id'] != '':
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_update()
+            )
+
+            return jsonify(
+                {
+                    'status': 'update realizado com sucesso!',
+                    'response': http_response_postgresql.body
+                }), http_response_postgresql.status_code
+        
     
     if is_request_js != 'XMLHttpRequest':
         http_response_mongo = request_adapter(
