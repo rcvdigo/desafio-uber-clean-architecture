@@ -218,33 +218,53 @@ def select():
 
 @email_route_bp.route("/view/<_id>/", methods=["GET"])
 def view(_id):
+    if 'text/html' in request_flask.headers.get('Accept'):
+        # Se for um ObjectID válido do MongoDB
+        if len(_id) == 24:
 
-    # Se for um ObjectID válido do MongoDB
-    if len(_id) == 24:
-        http_response_mongo = request_adapter(
-            request=request_flask,
-            controller=mongodb_composer_select_id_html()
-        )
-        return render_template(
-            'view.html',
-            http_response=http_response_mongo.body,
-            http_status=http_response_mongo.status_code
-        )
-    
-    # Se for um ID numérico
-    elif _id.isdigit():
-        
-        http_response_postgresql = request_adapter(
-            request=request_flask,
-            controller=postgresql_composer_select_id()
-        )
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_select_id_html()
+            )
 
-        return render_template(
-            'view.html',
-            http_response=http_response_postgresql.body,
-            http_status=http_response_postgresql.status_code
-        )
+            return render_template(
+                'view.html',
+                http_response=http_response_mongo.body,
+                http_status=http_response_mongo.status_code
+            )
 
+        # Se for um ID numérico
+        elif _id.isdigit():
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_select_id()
+            )
+
+            return render_template(
+                'view.html',
+                http_response=http_response_postgresql.body,
+                http_status=http_response_postgresql.status_code
+            )
+
+    else:
+        if len(_id) == 24:
+            
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_select_id_html()
+            )
+
+            return http_response_mongo.body, http_response_mongo.status_code
+
+        elif _id.isdigit():
+
+            http_response_postgresql = request_adapter(
+                    request=request_flask,
+                    controller=postgresql_composer_select_id()
+                )
+            
+            return http_response_postgresql.body, http_response_postgresql.status_code
 
 
 @email_route_bp.route("/api/update/", methods=['POST'])
@@ -253,7 +273,7 @@ def update():
 
     if is_request_js == 'XMLHttpRequest':
 
-        if request_flask.json['_id'] != '':
+        if len(request_flask.json['_id']) == 24:
 
             http_response_mongo = request_adapter(
                 request=request_flask,
@@ -265,8 +285,8 @@ def update():
                     'status': 'update realizado com sucesso!',
                     'response': http_response_mongo.body
                 }), http_response_mongo.status_code
-        
-        elif request_flask.json['id'] != '':
+
+        elif request_flask.json['_id'].isdigit():
 
             http_response_postgresql = request_adapter(
                 request=request_flask,
@@ -278,19 +298,34 @@ def update():
                     'status': 'update realizado com sucesso!',
                     'response': http_response_postgresql.body
                 }), http_response_postgresql.status_code
-        
-    
-    if is_request_js != 'XMLHttpRequest':
-        http_response_mongo = request_adapter(
-            request=request_flask,
-            controller=mongodb_composer_update_api()
-        )
 
-        return jsonify(
-            {
-                'status': 'update realizado com sucesso!',
-                'response': http_response_mongo.body
-            }), http_response_mongo.status_code
+    if is_request_js != 'XMLHttpRequest':
+
+        if len(request_flask.json['_id']) == 24:
+
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_update_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'update realizado com sucesso!',
+                    'response': http_response_mongo.body
+                }), http_response_mongo.status_code
+
+        elif request_flask.json['_id'].isdigit():
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_update()
+            )
+
+            return jsonify(
+                {
+                    'status': 'update realizado com sucesso!',
+                    'response': http_response_postgresql.body
+                }), http_response_postgresql.status_code
 
 
 @email_route_bp.route("/api/delete/", methods=["POST"])

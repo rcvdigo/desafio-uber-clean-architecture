@@ -14,7 +14,7 @@ class PostgresqlControllerUpdateApi(ControllerInterface):
         http_request: HttpRequest,
     ) -> HttpResponse:
 
-        id = http_request.body["id"]
+        id = http_request.body["_id"]
         name = http_request.body["name"]
         age = http_request.body["age"]
         value = f'{http_request.body["value"]:.2f}'
