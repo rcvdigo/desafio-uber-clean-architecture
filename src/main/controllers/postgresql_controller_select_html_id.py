@@ -1,12 +1,10 @@
-from datetime import datetime
 from src.main.core.controller_interface import ControllerInterface
 from src.main.core.database_use_case import DatabaseUseCase
 from src.main.core.http_request import HttpRequest
 from src.main.core.http_response import HttpResponse
-from src.main.models.messages import Messages
 
 
-class PostgreControllerSelectApi(ControllerInterface):
+class PostgresqlControllerSelectIdHtml(ControllerInterface):
 
     def __init__(self, use_case: DatabaseUseCase) -> None:
         self.__use_case = use_case
@@ -15,10 +13,10 @@ class PostgreControllerSelectApi(ControllerInterface):
         self,
         http_request: HttpRequest,
     ) -> HttpResponse:
-
-        messages = self.__use_case.select_db()
+        
+        response = self.__use_case.select_db_id(id=http_request.path_params['_id'])
 
         return HttpResponse(
-            status_code=messages.status_code,
-            body=messages.body
+            status_code=response.status_code,
+            body=response.body
         )

@@ -41,18 +41,60 @@ class DatabaseServicePostgresql(DatabaseUseCase):
                 status_code=200,
                 body=new_message
             )
+
         except Exception as e:
             raise e
 
     def select_db(self) -> HttpResponse:
         try:
-            return self.__postgresql_gateway.select_postgresql()
+            messages=self.__postgresql_gateway.select_postgresql()
+
+            messages_dict={str(message.id): {
+                'id': message.id,
+                'name': message.name,
+                'age': message.age,
+                'value': message.value,
+                'date': message.date.strftime("%Y-%m-%d"),
+                'key_pix': message.key_pix,
+                'source': message.source,
+                'to': message.to,
+                'subject': message.subject,
+                'body': message.body,
+                'phone_numbers': message.phone_numbers
+            } for message in messages}
+
+            return HttpResponse(
+                status_code=200,
+                body=messages_dict
+            )
+
         except Exception as e:
             raise e
         
     def select_db_id(self, id) -> HttpResponse:
         try:
-            return self.__postgresql_gateway.select_postgresql_id(id=id)
+            message=self.__postgresql_gateway.select_postgresql_id(id=id)
+
+            for msg in message:
+                message_dict={
+                    'id': msg.id,
+                    'name': msg.name,
+                    'age': msg.age,
+                    'value': msg.value,
+                    'date': msg.date.strftime("%Y-%m-%d"),
+                    'key_pix': msg.key_pix,
+                    'source': msg.source,
+                    'to': msg.to,
+                    'subject': msg.subject,
+                    'body': msg.body,
+                    'phone_numbers': msg.phone_numbers
+                    }
+
+            return HttpResponse(
+                status_code=200,
+                body=message_dict
+            )
+
         except Exception as e:
             raise e
     
