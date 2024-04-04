@@ -153,6 +153,11 @@ class DatabaseServicePostgresql(DatabaseUseCase):
     def delete_db(self, id: int) -> HttpResponse:
         try:
             filter = id
-            return self.__postgresql_gateway.delete_postgresql(filter=filter)
+            message_delete = self.__postgresql_gateway.delete_postgresql(filter=filter)
+            
+            return HttpResponse(
+                status_code=200,
+                body=message_delete
+            ) 
         except Exception as e:
             raise e

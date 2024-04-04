@@ -21,6 +21,7 @@ from src.main.composers.mongodb_composer_update import mongodb_composer_update_a
 from src.main.composers.postgresql_composer_update import postgresql_composer_update
 from src.main.composers.mongodb_composer_select import mongodb_composer_select_api
 from src.main.composers.mongodb_composer_delete import mongodb_composer_delete_api
+from src.main.composers.postgresql_composer_delete import postgresql_composer_delete_api
 from src.main.composers.mongodb_composer_select_id import mongodb_composer_select_id_html
 from src.main.composers.postgresql_composer_select_id import postgresql_composer_select_id
 from src.main.composers.postgresql_composer_insert import postgresql_composer_insert_api
@@ -332,26 +333,58 @@ def update():
 def delete():
     is_request_js = request_flask.headers.get('X-Requested-With')
     if is_request_js == 'XMLHttpRequest':
-        http_response_mongo = request_adapter(
-            request=request_flask,
-            controller=mongodb_composer_delete_api()
-        )
-        return jsonify(
-            {
-                'status': 'delete realizado com sucesso!',
-                'response': http_response_mongo.body
-            }), http_response_mongo.status_code
+
+        if len(request_flask.json['_id']) == 24:
+            
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_delete_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'delete realizado com sucesso!',
+                    'response': http_response_mongo.body
+                }), http_response_mongo.status_code
+        
+        elif request_flask.json['_id'].isdigit():
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_delete_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'delete realizado com sucesso!',
+                    'response': http_response_postgresql.body
+                }), http_response_postgresql.status_code
 
     if is_request_js != 'XMLHttpRequest':
-        http_response_mongo = request_adapter(
-            request=request_flask,
-            controller=mongodb_composer_delete_api()
-        )
-        return jsonify(
-            {
-                'status': 'delete realizado com sucesso!',
-                'response': http_response_mongo.body
-            }), http_response_mongo.status_code
+
+        if len(request_flask.json['_id']) == 24:
+            http_response_mongo = request_adapter(
+                request=request_flask,
+                controller=mongodb_composer_delete_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'delete realizado com sucesso!',
+                    'response': http_response_mongo.body
+                }), http_response_mongo.status_code
+        elif request_flask.json['_id'].isdigit():
+
+            http_response_postgresql = request_adapter(
+                request=request_flask,
+                controller=postgresql_composer_delete_api()
+            )
+
+            return jsonify(
+                {
+                    'status': 'delete realizado com sucesso!',
+                    'response': http_response_postgresql.body
+                }), http_response_postgresql.status_code
 
 
 @email_route_bp.route("/consumer/", methods=["GET"])
