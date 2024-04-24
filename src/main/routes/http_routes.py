@@ -156,7 +156,12 @@ def send_email_sns():
 
 @email_route_bp.route("/api/select/", methods=["GET"])
 def select():
-    is_request = request_flask.headers.get('Accept').split(',')[0]
+    # Verifica se o cabeçalho 'Accept' está presente na requisição
+    is_request = request_flask.headers.get('Accept')
+    if is_request is not None:
+        # Divide o cabeçalho 'Accept' para obter o tipo de conteúdo desejado
+        is_request = is_request.split(',')[0]
+
     if is_request == 'text/html':
         
         http_response_mongo = request_adapter(
@@ -189,7 +194,7 @@ def select():
             http_status=http_response.status_code
             )
     
-    if is_request != 'text/html':
+    else:
 
         http_response_mongo = request_adapter(
             request=request_flask,
@@ -215,6 +220,8 @@ def select():
             )        
 
         return jsonify(http_response.body), http_response.status_code
+    # Se nenhum dos casos anteriores for atendido, retorna 404
+    return jsonify({'error': 'Not Found'}), 404
 
 
 @email_route_bp.route("/view/<_id>/", methods=["GET"])
